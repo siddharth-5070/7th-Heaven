@@ -18,7 +18,7 @@ app.use(express.static("public"));
 
 
 // MongoDB connection
-mongoose.connect("mongodb://127.0.0.1:27017/restaurantDB", {
+mongoose.connect("mongodb+srv://siddharthsingh4658_db_user:ALIVEis123@cluster0.1jdgukq.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
