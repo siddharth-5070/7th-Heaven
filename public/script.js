@@ -142,7 +142,7 @@ async function handleSignup() {
   const mobile = document.getElementById("signupMobile").value;
 
   try {
-    const res = await fetch("/api/signup", {
+    const res = await fetch("https://seventh-heaven-g20e.onrender.com/api/auth/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, email, password, address, mobile }),
@@ -165,7 +165,8 @@ async function handleLogin() {
   const password = document.getElementById("loginPassword").value;
 
   try {
-    const res = await fetch("/api/login", {
+    const res = await fetch("https://seventh-heaven-g20e.onrender.com/api/auth/login",
+ {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
