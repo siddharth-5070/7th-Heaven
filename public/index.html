@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>7th Heaven Restaurant</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Navbar -->
+    <header>
+      <nav class="navbar">
+        <div class="logo">7th Heaven</div>
+        <ul class="nav-links">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#menu">Menu</a></li>
+          <li><a href="#gallery">Gallery</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#contact">Contact Us</a></li>
+        </ul>
+
+        <!-- Buttons -->
+        <div class="nav-actions">
+          <button id="navbarLoginBtn" type="button">Login</button>
+          <button id="navbarSignupBtn" type="button">Sign Up</button>
+          <button id="logoutBtn" style="display:none;">Logout</button>
+          <button id="cartBtn" type="button">Cart 🛒</button>
+        </div>
+      </nav>
+    </header>
+
+    <!-- Welcome Message -->
+    <div style="text-align: center; margin-top: 80px">
+      <h3 id="welcomeMsg"></h3>
+    </div>
+
+    <!-- Cart Modal -->
+    <div id="cartModal" class="modal">
+      <div class="modal-content">
+        <span class="close" id="closeCart">&times;</span>
+        <h2>Your Cart</h2>
+        <ul id="cartItems"></ul>
+        <h3>Total: ₹<span id="cartTotal">0</span></h3>
+        <button id="submitOrder">Submit Order</button>
+      </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+      <div class="modal-content">
+        <span id="closeLogin" class="close">&times;</span>
+        <h2>Login</h2>
+        <input type="email" id="loginEmail" placeholder="Email" required />
+        <input
+          type="password"
+          id="loginPassword"
+          placeholder="Password"
+          required
+          minlength="6"
+        />
+        <button id="loginSubmit">Login</button>
+      </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div id="signupModal" class="modal">
+      <div class="modal-content">
+        <span id="closeSignup">&times;</span>
+        <h2>Signup</h2>
+        <input type="text" id="signupName" placeholder="Name" required />
+        <input type="email" id="signupEmail" placeholder="Email" required />
+        <input
+          type="password"
+          id="signupPassword"
+          placeholder="Password"
+          required
+          minlength="6"
+        />
+        <input type="text" id="signupAddress" placeholder="Address" />
+        <input
+          type="tel"
+          id="signupMobile"
+          placeholder="Mobile Number"
+          required
+          pattern="[0-9]{10}"
+        />
+        <button id="signupSubmit">Sign Up</button>
+      </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+      <h1>Welcome to 7th Heaven</h1>
+      <p>Delicious food, cozy ambience, unforgettable moments.</p>
+      <a href="#menu" class="btn">Order Now</a>
+    </section>
+
+    <!-- Menu Section -->
+    <section id="menu">
+      <h2>Our Menu</h2>
+      <div class="menu-container">
+        <div class="menu-item">
+          <img src="./images/pizzza.jpg" alt="Margherita Pizza" />
+          <div class="content">
+            <h3>Margherita Pizza</h3>
+            <p>
+              Classic thin-crust pizza topped with fresh mozzarella, basil
+              leaves, and tomato sauce.
+            </p>
+            <div class="price">₹250</div>
+            <button
+              class="add-to-cart"
+              data-name="Margherita Pizza"
+              data-price="250"
+            >
+              Add to Cart
+            </button>
+          </div>
+        </div>
+
+        <div class="menu-item">
+          <img src="./images/burger.jpg" alt="Cheese Burger" />
+          <div class="content">
+            <h3>Cheese Burger</h3>
+            <p>
+              Juicy paneer patty layered with melted cheese, lettuce, tomato,
+              and house-made sauce.
+            </p>
+            <div class="price">₹180</div>
+            <button
+              class="add-to-cart"
+              data-name="Cheese Burger"
+              data-price="180"
+            >
+              Add to Cart
+            </button>
+          </div>
+        </div>
+
+        <div class="menu-item">
+          <img src="./images/pasta.jpg" alt="Italian Pasta" />
+          <div class="content">
+            <h3>Italian Pasta</h3>
+            <p>
+              Creamy Alfredo pasta tossed with garlic, herbs, and parmesan
+              cheese.
+            </p>
+            <div class="price">₹220</div>
+            <button
+              class="add-to-cart"
+              data-name="Italian Pasta"
+              data-price="220"
+            >
+              Add to Cart
+            </button>
+          </div>
+        </div>
+
+        <div class="menu-item">
+          <img
+            src="https://restaurant-website-frontend-gamma.vercel.app/assets/paneer-szaON6Gp.jpg"
+            alt="Paneer Butter Masala"
+          />
+          <div class="content">
+            <h3>Paneer Butter Masala</h3>
+            <p>
+              Soft paneer cubes cooked in a rich, buttery tomato gravy with
+              aromatic spices.
+            </p>
+            <div class="price">₹320</div>
+            <button
+              class="add-to-cart"
+              data-name="Paneer Butter Masala"
+              data-price="320"
+            >
+              Add to Cart
+            </button>
+          </div>
+        </div>
+
+        <div class="menu-item">
+          <img
+            src="https://restaurant-website-frontend-gamma.vercel.app/assets/Chole_Bhature-X8q6Y03k.png"
+            alt="Chole Bhature"
+          />
+          <div class="content">
+            <h3>Chole Bhature</h3>
+            <p>
+              Spiced chickpea curry served with hot, fluffy, golden fried
+              bhature.
+            </p>
+            <div class="price">₹150</div>
+            <button
+              class="add-to-cart"
+              data-name="Chole Bhature"
+              data-price="150"
+            >
+              Add to Cart
+            </button>
+          </div>
+        </div>
+
+        <div class="menu-item">
+          <img src="./images/Dessert (2).jpg" alt="Chocolate Lava Cake" />
+          <div class="content">
+            <h3>Chocolate Lava Cake</h3>
+            <p>
+              Warm chocolate cake with a gooey molten center, served with a hint
+              of vanilla.
+            </p>
+            <div class="price">₹100</div>
+            <button
+              class="add-to-cart"
+              data-name="Chocolate Lava Cake"
+              data-price="100"
+            >
+              Add to Cart
+            </button>
+          </div>
+        </div>
+
+        <div class="menu-item">
+          <img src="./images/veg.jpg" alt="Veg Thali" />
+          <div class="content">
+            <h3>Veg Thali</h3>
+            <p>
+              A wholesome platter of dal, sabzi, roti, rice, and dessert for a
+              complete meal.
+            </p>
+            <div class="price">₹150</div>
+            <button class="add-to-cart" data-name="Veg Thali" data-price="150">
+              Add to Cart
+            </button>
+          </div>
+        </div>
+
+        <div class="menu-item">
+          <img src="./images/samosa.jpg" alt="Samosa" />
+          <div class="content">
+            <h3>Samosa</h3>
+            <p>
+              Golden-fried pastry filled with spiced potato and peas, served
+              with chutney.
+            </p>
+            <div class="price">₹30</div>
+            <button class="add-to-cart" data-name="Samosa" data-price="30">
+              Add to Cart
+            </button>
+          </div>
+        </div>
+
+        <div class="menu-item">
+          <img src="./images/Dessert.jpg" alt="Dessert" />
+          <div class="content">
+            <h3>Dessert</h3>
+            <p>
+              Refreshing seasonal dessert made with creamy textures and sweet
+              flavors.
+            </p>
+            <div class="price">₹100</div>
+            <button class="add-to-cart" data-name="Dessert" data-price="100">
+              Add to Cart
+            </button>
+          </div>
+        </div>
+
+        <div class="menu-item">
+          <img src="./images/coffee.jpg" alt="Coffee" />
+          <div class="content">
+            <h3>Coffee</h3>
+            <p>
+              Freshly brewed coffee with rich aroma and bold flavor to energize
+              your day.
+            </p>
+            <div class="price">₹80</div>
+            <button class="add-to-cart" data-name="Coffee" data-price="80">
+              Add to Cart
+            </button>
+          </div>
+        </div>
+
+        <div class="menu-item">
+          <img src="./images/dosa.jpg" alt="Dosa" />
+          <div class="content">
+            <h3>Dosa</h3>
+            <p>
+              Crispy South Indian dosa served with coconut chutney and tangy
+              sambar.
+            </p>
+            <div class="price">₹130</div>
+            <button class="add-to-cart" data-name="Dosa" data-price="130">
+              Add to Cart
+            </button>
+          </div>
+        </div>
+
+        <div class="menu-item">
+          <img src="./images/gulab jamun.jpg" alt="Gulab Jamun" />
+          <div class="content">
+            <h3>Gulab Jamun</h3>
+            <p>
+              Soft fried dumplings soaked in saffron and cardamom flavored sugar
+              syrup.
+            </p>
+            <div class="price">₹80</div>
+            <button class="add-to-cart" data-name="Gulab Jamun" data-price="80">
+              Add to Cart
+            </button>
+          </div>
+        </div>
+
+        <div class="menu-item">
+          <img src="./images/Biryani.jpg" alt="Biryani" />
+          <div class="content">
+            <h3>Biryani</h3>
+            <p>
+              Fragrant basmati rice layered with spices, vegetables, and herbs
+              for authentic taste.
+            </p>
+            <div class="price">₹250</div>
+            <button class="add-to-cart" data-name="Biryani" data-price="250">
+              Add to Cart
+            </button>
+          </div>
+        </div>
+
+        <div class="menu-item">
+          <img src="./images/momos.jpg" alt="Momos" />
+          <div class="content">
+            <h3>Momos</h3>
+            <p>
+              Steamed dumplings filled with spiced vegetables, served with chili
+              garlic sauce.
+            </p>
+            <div class="price">₹110</div>
+            <button class="add-to-cart" data-name="Momos" data-price="110">
+              Add to Cart
+            </button>
+          </div>
+        </div>
+
+        <div class="menu-item">
+          <img src="./images/rajasthani.jpg" alt="Rajasthani Thali" />
+          <div class="content">
+            <h3>Rajasthani Thali</h3>
+            <p>
+              A royal platter with dal baati churma, gatte ki sabzi, kadhi, and
+              rotis.
+            </p>
+            <div class="price">₹300</div>
+            <button
+              class="add-to-cart"
+              data-name="Rajasthani Thali"
+              data-price="300"
+            >
+              Add to Cart
+            </button>
+          </div>
+        </div>
+
+        <div class="menu-item">
+          <img src="./images/spring roll.jpg" alt="Spring Roll" />
+          <div class="content">
+            <h3>Spring Roll</h3>
+            <p>
+              Crispy rolls stuffed with stir-fried vegetables and served with
+              tangy dip.
+            </p>
+            <div class="price">₹70</div>
+            <button class="add-to-cart" data-name="Spring Roll" data-price="70">
+              Add to Cart
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- close menu-container -->
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="gallery">
+      <h2>Gallery</h2>
+      <div class="gallery-container">
+        <img src="./images/Rest_3.jpg" alt="Restaurant dining area" />
+        <img
+          src="./images/Rest_4.jpg"
+          alt="Cozy seating corner in the restaurant"
+        />
+        <img
+          src="./images/Restaurant.jpg"
+          alt="Main restaurant interior view"
+        />
+        <img src="./images/restaurant 2.jpg" alt="Modern restaurant setup" />
+        <img
+          src="./images/dogu-tuncer-KsVXWwHwhzo-unsplash.jpg"
+          alt="Close-up of a dish in restaurant"
+        />
+        <img
+          src="./images/gallery.jpg"
+          alt="Restaurant interior and ambiance"
+        />
+      </div>
+    </section>
+
+    <!-- Gallery Modal -->
+    <div id="galleryModal" class="modal">
+      <span id="closeGallery" class="close">&times;</span>
+      <img
+        id="galleryModalImg"
+        src=""
+        alt="Gallery Image"
+        style="max-width: 90%; max-height: 90%"
+      />
+    </div>
+    <!-- About Section -->
+    <section id="about" class="about">
+      <h2>About Us</h2>
+      <p>
+        At 7th Heaven, we bring you the perfect blend of taste and tradition.
+        With fresh ingredients and authentic recipes, our chefs create dishes
+        that delight your senses. Whether it’s a family dinner or a casual
+        outing, we promise you an experience worth remembering.
+      </p>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+      <h2>Contact Us</h2>
+      <p>📍Bhubaneswar</p>
+      <p>📞 Phone: +91 6204784600</p>
+      <p>📧 Email: contact@7thheaven.com</p>
+    </section>
+    
+
+    <footer>
+      <p>&copy; 2025 7th Heaven Restaurant. All rights reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
