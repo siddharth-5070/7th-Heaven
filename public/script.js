@@ -105,6 +105,26 @@ function decreaseQty(index) {
   renderCart();
 }
 
+// =======================
+// Add to Cart
+// =======================
+document.querySelectorAll(".add-to-cart").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const name = btn.dataset.name;
+    const price = parseInt(btn.dataset.price);
+
+    // Check if item already exists in cart
+    const existingItem = cart.find(item => item.name === name);
+    if (existingItem) {
+      existingItem.quantity += 1;
+    } else {
+      cart.push({ name, price, quantity: 1 });
+    }
+
+    renderCart();
+    alert(`${name} added to cart!`);
+  });
+});
 
 
 // =======================
