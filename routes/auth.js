@@ -4,9 +4,11 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
 const router = express.Router();
-const JWT_SECRET = "your_secret_key_here"; // use .env in production
+const JWT_SECRET = process.env.JWT_SECRET || "your_secret_key_here"; // use .env in production
 
+// =======================
 // Signup
+// =======================
 router.post("/signup", async (req, res) => {
   const { name, email, password, address, mobile } = req.body;
   try {
@@ -24,17 +26,27 @@ router.post("/signup", async (req, res) => {
     });
 
     // Create JWT token
-    const token = jwt.sign({ email: user.email, name: user.name }, JWT_SECRET, { expiresIn: "7d" });
+    const token = jwt.sign(
+      { email: user.email, name: user.name },
+      JWT_SECRET,
+      { expiresIn: "7d" }
+    );
 
     res.cookie("token", token, { httpOnly: true });
     res.json({ success: true, user: { name: user.name, email: user.email } });
   } catch (err) {
-    console.error(err);
-    res.json({ success: false, message: "Error creating user" });
+    console.error("❌ Signup error:", err);
+    res.status(500).json({
+      success: false,
+      message: "Error creating user",
+      error: err.message, // helpful for debugging
+    });
   }
 });
 
+// =======================
 // Login
+// =======================
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
   try {
@@ -45,17 +57,23 @@ router.post("/login", async (req, res) => {
     if (!match)
       return res.json({ success: false, message: "Incorrect password" });
 
-    const token = jwt.sign({ email: user.email, name: user.name }, JWT_SECRET, { expiresIn: "7d" });
+    const token = jwt.sign(
+      { email: user.email, name: user.name },
+      JWT_SECRET,
+      { expiresIn: "7d" }
+    );
 
     res.cookie("token", token, { httpOnly: true });
     res.json({ success: true, user: { name: user.name, email: user.email } });
   } catch (err) {
-    console.error(err);
-    res.json({ success: false, message: "Error logging in" });
+    console.error("❌ Login error:", err);
+    res.status(500).json({ success: false, message: "Error logging in", error: err.message });
   }
 });
 
+// =======================
 // Verify token
+// =======================
 router.get("/verify", (req, res) => {
   const token = req.cookies.token;
   if (!token) return res.json({ success: false });
@@ -64,11 +82,13 @@ router.get("/verify", (req, res) => {
     const decoded = jwt.verify(token, JWT_SECRET);
     res.json({ success: true, user: decoded });
   } catch (err) {
-    res.json({ success: false });
+    res.json({ success: false, error: err.message });
   }
 });
 
+// =======================
 // Logout
+// =======================
 router.post("/logout", (req, res) => {
   res.clearCookie("token");
   res.json({ success: true });
