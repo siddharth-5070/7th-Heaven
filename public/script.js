@@ -1,7 +1,7 @@
 // =======================
 // DOM Elements
 // =======================
-const API_BASE = "https://seventh-heaven-g20e.onrender.com";
+const API_BASE = "https://seventh-heaven-g20e.onrender.com"; 
 const loginModal = document.getElementById("loginModal");
 const signupModal = document.getElementById("signupModal");
 const cartModal = document.getElementById("cartModal");
@@ -126,7 +126,6 @@ document.querySelectorAll(".add-to-cart").forEach((btn) => {
   });
 });
 
-
 // =======================
 // Submit Order
 // =======================
@@ -146,10 +145,11 @@ document.getElementById("submitOrder").addEventListener("click", async () => {
     const orderData = { user, items, total };
     console.log("📦 Sending order:", orderData);
 
+    // ✅ FIXED: added await before fetch
     const response = await fetch(`${API_BASE}/api/order`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(orderData),
+      body: JSON.stringify(orderData)
     });
 
     const result = await response.json();
@@ -157,7 +157,7 @@ document.getElementById("submitOrder").addEventListener("click", async () => {
     if (result.success) {
       alert("✅ Order placed successfully!");
       cart.length = 0; // clear cart
-      renderCart();    // re-render cart (instead of updateCartUI)
+      renderCart();    // re-render cart
       closeModal(cartModal);
     } else {
       alert("❌ " + result.message);
@@ -167,6 +167,7 @@ document.getElementById("submitOrder").addEventListener("click", async () => {
     alert("❌ Failed to place order. Please try again.");
   }
 });
+
 
 
 
