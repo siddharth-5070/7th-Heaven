@@ -16,10 +16,10 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // Routes
 const authRoutes = require("./routes/auth");
-const orderRoutes = require("./routes/order");  // ✅ add this
+const orderRoutes = require("./routes/orders");  // ✅ correct import
 
 app.use("/api/auth", authRoutes);
-app.use("/api/order", orderRoutes);  // ✅ mount here
+app.use("/api/order", orderRoutes);  // ✅ correct variable
 
 // Default test route
 app.get("/", (req, res) => {
