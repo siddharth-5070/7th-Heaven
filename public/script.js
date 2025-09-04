@@ -1,6 +1,7 @@
 // =======================
 // DOM Elements
 // =======================
+const API_BASE = "https://seventh-heaven-g20e.onrender.com";
 const loginModal = document.getElementById("loginModal");
 const signupModal = document.getElementById("signupModal");
 const cartModal = document.getElementById("cartModal");
@@ -77,59 +78,77 @@ function renderCart() {
   cartItemsEl.innerHTML = "";
   let total = 0;
   cart.forEach((item, index) => {
-    total += item.price;
+    total += item.price * item.quantity;
     const li = document.createElement("li");
-    li.innerHTML = `${item.name} - ₹${item.price} <button onclick="removeFromCart(${index})">❌</button>`;
+    li.innerHTML = `
+      ${item.name} - ₹${item.price} × ${item.quantity} 
+      <button onclick="decreaseQty(${index})">➖</button>
+      <button onclick="increaseQty(${index})">➕</button>
+      <button onclick="removeFromCart(${index})">❌</button>
+    `;
     cartItemsEl.appendChild(li);
   });
   cartTotalEl.textContent = total;
 }
 
-function removeFromCart(index) {
-  cart.splice(index, 1);
+function increaseQty(index) {
+  cart[index].quantity++;
   renderCart();
 }
 
-document.querySelectorAll(".add-to-cart").forEach((btn) => {
-  btn.addEventListener("click", () => {
-    const name = btn.dataset.name;
-    const price = parseInt(btn.dataset.price);
-    cart.push({ name, price });
-    renderCart();
-    alert(`${name} added to cart!`);
-  });
-});
-
-submitOrderBtn.addEventListener("click", async () => {
-  if (!currentUser) {
-    alert("Please login first to submit the order!");
-    return;
+function decreaseQty(index) {
+  if (cart[index].quantity > 1) {
+    cart[index].quantity--;
+  } else {
+    cart.splice(index, 1);
   }
-  if (cart.length === 0) {
-    alert("Cart is empty!");
-    return;
-  }
+  renderCart();
+}
 
+
+
+// =======================
+// Submit Order
+// =======================
+document.getElementById("submitOrder").addEventListener("click", async () => {
   try {
-    const res = await fetch("/api/orders", {
+    const user = currentUser?.email || "guest";
+
+    // Ensure items include quantity
+    const items = cart.map(item => ({
+      name: item.name,
+      price: item.price,
+      quantity: item.quantity || 1
+    }));
+
+    const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+    const orderData = { user, items, total };
+    console.log("📦 Sending order:", orderData);
+
+    const response = await fetch(`${API_BASE}/api/order`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ user: currentUser.email, items: cart }),
+      body: JSON.stringify(orderData),
     });
-    const data = await res.json();
-    if (data.success) {
-      alert("Order placed successfully!");
-      cart = [];
-      renderCart();
+
+    const result = await response.json();
+
+    if (result.success) {
+      alert("✅ Order placed successfully!");
+      cart.length = 0; // clear cart
+      renderCart();    // re-render cart (instead of updateCartUI)
       closeModal(cartModal);
     } else {
-      alert("Failed to place order.");
+      alert("❌ " + result.message);
     }
-  } catch (err) {
-    console.error(err);
-    alert("Error placing order.");
+  } catch (error) {
+    console.error("❌ Error submitting order:", error);
+    alert("❌ Failed to place order. Please try again.");
   }
 });
+
+
 
 // =======================
 // Auth Functions
@@ -142,11 +161,14 @@ async function handleSignup() {
   const mobile = document.getElementById("signupMobile").value;
 
   try {
-    const res = await fetch("https://seventh-heaven-g20e.onrender.com/api/auth/signup", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, email, password, address, mobile }),
-    });
+    const res = await fetch(
+      "https://seventh-heaven-g20e.onrender.com/api/auth/signup",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password, address, mobile }),
+      }
+    );
     const data = await res.json();
     if (data.success) {
       currentUser = data.user;
@@ -165,12 +187,14 @@ async function handleLogin() {
   const password = document.getElementById("loginPassword").value;
 
   try {
-    const res = await fetch("https://seventh-heaven-g20e.onrender.com/api/auth/login",
- {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
+    const res = await fetch(
+      "https://seventh-heaven-g20e.onrender.com/api/auth/login",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      }
+    );
     const data = await res.json();
     if (data.success) {
       currentUser = data.user;
@@ -189,7 +213,10 @@ loginSubmit.addEventListener("click", handleLogin);
 
 logoutBtn.addEventListener("click", async () => {
   try {
-    await fetch("/api/logout", { method: "POST", credentials: "include" });
+    await fetch("https://seventh-heaven-g20e.onrender.com/api/logout", {
+      method: "POST",
+      credentials: "include",
+    });
     currentUser = null;
     cart = [];
     renderCart();
@@ -229,7 +256,12 @@ function afterLogin() {
 // =======================
 window.addEventListener("DOMContentLoaded", async () => {
   try {
-    const res = await fetch("/api/verify", { credentials: "include" });
+    const res = await fetch(
+      "https://seventh-heaven-g20e.onrender.com/api/verify",
+      {
+        credentials: "include",
+      }
+    );
     const data = await res.json();
     if (data.success) {
       currentUser = data.user;
