@@ -14,6 +14,15 @@ app.use(cookieParser());
 // Serve static frontend files (optional if frontend is on Netlify)
 app.use(express.static(path.join(__dirname, "public")));
 
+const cors = require("cors");
+
+app.use(cors({
+  origin: "https://7th-heaven1.netlify.app", // 
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true
+}));
+
+
 // Routes
 const authRoutes = require("./routes/auth");
 const orderRoutes = require("./routes/orders");  // ✅ correct import
