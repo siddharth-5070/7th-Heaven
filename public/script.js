@@ -306,3 +306,9 @@ window.addEventListener("DOMContentLoaded", async () => {
     console.error("Error verifying login:", err);
   }
 });
+const hamburger = document.querySelector('.hamburger');
+const navLinks = document.querySelector('.nav-links');
+
+hamburger.addEventListener('click', () => {
+  navLinks.classList.toggle('active');
+});
