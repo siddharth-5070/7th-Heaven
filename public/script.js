@@ -30,6 +30,50 @@ let cart = [];
 let currentUser = null;
 
 // =======================
+// DOM Elements
+// =======================
+const API_BASE = "https://seventh-heaven-g20e.onrender.com"; 
+// ... all other DOM elements ...
+
+// =======================
+// Validation Functions
+// =======================
+function validateSignupForm() {
+  const name = document.getElementById("signupName").value.trim();
+  const email = document.getElementById("signupEmail").value.trim();
+  const password = document.getElementById("signupPassword").value;
+  const address = document.getElementById("signupAddress").value.trim();
+  const mobile = document.getElementById("signupMobile").value.trim();
+
+  if (!name) { alert("❌ Name is required"); return false; }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!email || !emailRegex.test(email)) { alert("❌ Invalid email address"); return false; }
+
+  if (!password || password.length < 6) { alert("❌ Password must be at least 6 characters"); return false; }
+
+  if (!address) { alert("❌ Address is required"); return false; }
+
+  const mobileRegex = /^[0-9]{10}$/;
+  if (!mobile || !mobileRegex.test(mobile)) { alert("❌ Mobile must be 10 digits"); return false; }
+
+  return { name, email, password, address, mobile };
+}
+
+function validateLoginForm() {
+  const email = document.getElementById("loginEmail").value.trim();
+  const password = document.getElementById("loginPassword").value;
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!email || !emailRegex.test(email)) { alert("❌ Invalid email"); return false; }
+
+  if (!password) { alert("❌ Password is required"); return false; }
+
+  return { email, password };
+}
+
+
+// =======================
 // Modal Functions
 // =======================
 function openModal(modal) {
@@ -42,12 +86,27 @@ function closeModal(modal) {
   document.body.classList.remove("modal-open");
 }
 
+function toggleMenu() {
+  document.getElementById("nav-links").classList.toggle("active");
+  document.getElementById("auth-buttons").classList.toggle("active");
+}
+
+
+
 // =======================
 // Event Listeners for Modals
 // =======================
 loginBtn.addEventListener("click", () => openModal(loginModal));
 signupBtn.addEventListener("click", () => openModal(signupModal));
-cartBtn.addEventListener("click", () => openModal(cartModal));
+cartBtn.addEventListener("click", () => {
+  if (!currentUser) {
+    alert("❌ Please log in to view your cart.");
+    openModal(loginModal); // optional: open login modal
+    return;
+  }
+  openModal(cartModal);
+});
+
 
 closeLogin.addEventListener("click", () => closeModal(loginModal));
 closeSignup.addEventListener("click", () => closeModal(signupModal));
@@ -110,6 +169,12 @@ function decreaseQty(index) {
 // =======================
 document.querySelectorAll(".add-to-cart").forEach((btn) => {
   btn.addEventListener("click", () => {
+    if (!currentUser) {
+      alert("❌ Please log in to add items to your cart.");
+      openModal(loginModal); // optional: open login modal
+      return; // stop further execution
+    }
+
     const name = btn.dataset.name;
     const price = parseInt(btn.dataset.price);
 
@@ -125,6 +190,7 @@ document.querySelectorAll(".add-to-cart").forEach((btn) => {
     alert(`${name} added to cart!`);
   });
 });
+
 
 // =======================
 // Submit Order
@@ -175,59 +241,51 @@ document.getElementById("submitOrder").addEventListener("click", async () => {
 // Auth Functions
 // =======================
 async function handleSignup() {
-  const name = document.getElementById("signupName").value;
-  const email = document.getElementById("signupEmail").value;
-  const password = document.getElementById("signupPassword").value;
-  const address = document.getElementById("signupAddress").value;
-  const mobile = document.getElementById("signupMobile").value;
+  const validated = validateSignupForm();
+  if (!validated) return; // Stop if validation fails
 
   try {
-    const res = await fetch(
-      "https://seventh-heaven-g20e.onrender.com/api/auth/signup",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password, address, mobile }),
-      }
-    );
+    const res = await fetch(`${API_BASE}/api/auth/signup`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(validated),
+    });
     const data = await res.json();
     if (data.success) {
       currentUser = data.user;
       afterLogin();
     } else {
-      alert(data.message);
+      alert("❌ " + data.message);
     }
   } catch (err) {
     console.error(err);
-    alert("Error signing up.");
+    alert("❌ Error signing up.");
   }
 }
 
 async function handleLogin() {
-  const email = document.getElementById("loginEmail").value;
-  const password = document.getElementById("loginPassword").value;
+  const validated = validateLoginForm();
+  if (!validated) return;
 
   try {
-    const res = await fetch(
-      "https://seventh-heaven-g20e.onrender.com/api/auth/login",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      }
-    );
+    const res = await fetch(`${API_BASE}/api/auth/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(validated),
+    });
     const data = await res.json();
     if (data.success) {
       currentUser = data.user;
       afterLogin();
     } else {
-      alert(data.message);
+      alert("❌ " + data.message);
     }
   } catch (err) {
     console.error(err);
-    alert("Error logging in.");
+    alert("❌ Error logging in.");
   }
 }
+
 
 signupSubmit.addEventListener("click", handleSignup);
 loginSubmit.addEventListener("click", handleLogin);
