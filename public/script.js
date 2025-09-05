@@ -201,6 +201,7 @@ async function handleSignup() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, password, address, mobile }),
+        credentials: "include",  // 🔑 important
       }
     );
     const data = await res.json();
@@ -221,13 +222,13 @@ async function handleLogin() {
   const password = document.getElementById("loginPassword").value;
 
   try {
-    const res = await fetch(
-      "https://seventh-heaven-g20e.onrender.com/api/auth/login",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      }
+    const res = await fetch("https://seventh-heaven-g20e.onrender.com/api/auth/login", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ email, password }),
+  credentials: "include",  // 🔑 important
+});
+
     );
     const data = await res.json();
     if (data.success) {
