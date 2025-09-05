@@ -9,25 +9,31 @@
   <body>
     <!-- Navbar -->
     <header>
-      <nav class="navbar">
-        <div class="logo">7th Heaven</div>
-        <ul class="nav-links">
-          <li><a href="#home">Home</a></li>
-          <li><a href="#menu">Menu</a></li>
-          <li><a href="#gallery">Gallery</a></li>
-          <li><a href="#about">About</a></li>
-          <li><a href="#contact">Contact Us</a></li>
-        </ul>
+  <nav class="navbar">
+    <div class="logo">7th Heaven</div>
 
-        <!-- Buttons -->
-        <div class="nav-actions">
-          <button id="navbarLoginBtn" type="button">Login</button>
-          <button id="navbarSignupBtn" type="button">Sign Up</button>
-          <button id="logoutBtn" style="display:none;">Logout</button>
-          <button id="cartBtn" type="button">Cart 🛒</button>
-        </div>
-      </nav>
-    </header>
+    <!-- Hamburger -->
+    <div class="hamburger" onclick="toggleMenu()">☰</div>
+
+    <!-- Nav links -->
+    <ul class="nav-links" id="nav-links">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#menu">Menu</a></li>
+      <li><a href="#gallery">Gallery</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+
+    <!-- Auth buttons -->
+    <div class="auth-buttons" id="auth-buttons">
+      <button class="login-btn" id="navbarLoginBtn">Login</button>
+      <button class="signup-btn" id="navbarSignupBtn">Sign Up</button>
+      <button id="cartBtn">Cart 🛒</button>
+    </div>
+  </nav>
+</header>
+
+
 
     <!-- Welcome Message -->
     <div style="text-align: center; margin-top: 80px">
