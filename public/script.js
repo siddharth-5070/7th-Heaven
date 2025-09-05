@@ -223,25 +223,25 @@ async function handleLogin() {
 
   try {
     const res = await fetch("https://seventh-heaven-g20e.onrender.com/api/auth/login", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ email, password }),
-  credentials: "include",  // 🔑 important
-});
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+      credentials: "include",  // 🔑 important
+    });
 
-    );
     const data = await res.json();
     if (data.success) {
       currentUser = data.user;
       afterLogin();
     } else {
-      alert(data.message);
+      alert(data.message || "Invalid email or password.");
     }
   } catch (err) {
-    console.error(err);
+    console.error("❌ Login error:", err);
     alert("Error logging in.");
   }
 }
+
 
 signupSubmit.addEventListener("click", handleSignup);
 loginSubmit.addEventListener("click", handleLogin);
