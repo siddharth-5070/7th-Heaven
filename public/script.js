@@ -89,7 +89,9 @@ function closeModal(modal) {
 function toggleMenu() {
   document.getElementById("nav-links").classList.toggle("active");
   document.getElementById("auth-buttons").classList.toggle("active");
+  document.querySelector(".hamburger").classList.toggle("active"); // ✅ animate bars
 }
+
 
 
 
