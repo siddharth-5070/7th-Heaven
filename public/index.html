@@ -9,29 +9,33 @@
   <body>
     <!-- Navbar -->
     <header>
-  <nav class="navbar">
-    <div class="logo">7th Heaven</div>
+      <nav class="navbar">
+        <div class="logo">7th Heaven</div>
+        <div class="menu-toggle">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
 
+        <!-- Nav links -->
+        <ul class="nav-links" id="nav-links">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#menu">Menu</a></li>
+          <li><a href="#gallery">Gallery</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
 
-    <!-- Nav links -->
-    <ul class="nav-links" id="nav-links">
-      <li><a href="#home">Home</a></li>
-      <li><a href="#menu">Menu</a></li>
-      <li><a href="#gallery">Gallery</a></li>
-      <li><a href="#about">About</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
+        <!-- Auth buttons -->
+        <div class="auth-buttons" id="auth-buttons">
+          <button class="login-btn" id="navbarLoginBtn">Login</button>
+          <button class="signup-btn" id="navbarSignupBtn">Sign Up</button>
+          <button id="cartBtn">Cart 🛒</button>
+          <button id="logoutBtn" style="display:none;">Logout</button>
 
-    <!-- Auth buttons -->
-    <div class="auth-buttons" id="auth-buttons">
-      <button class="login-btn" id="navbarLoginBtn">Login</button>
-      <button class="signup-btn" id="navbarSignupBtn">Sign Up</button>
-      <button id="cartBtn">Cart 🛒</button>
-    </div>
-  </nav>
-</header>
-
-
+        </div>
+      </nav>
+    </header>
 
     <!-- Welcome Message -->
     <div style="text-align: center; margin-top: 80px">
@@ -433,7 +437,6 @@
       <p>📞 Phone: +91 6204784600</p>
       <p>📧 Email: contact@7thheaven.com</p>
     </section>
-    
 
     <footer>
       <p>&copy; 2025 7th Heaven Restaurant. All rights reserved.</p>
