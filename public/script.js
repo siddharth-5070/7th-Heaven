@@ -128,9 +128,17 @@ function removeFromCart(index) {
 // =======================
 document.querySelectorAll(".add-to-cart").forEach((btn) => {
   btn.addEventListener("click", () => {
+    // Check if user is logged in
+    if (!currentUser) {
+      alert("❌ Please login to add items to the cart.");
+      openModal(loginModal); // optional: open login modal
+      return;
+    }
+
     const name = btn.dataset.name;
     const price = parseInt(btn.dataset.price);
 
+    // Check if item already exists in cart
     const existingItem = cart.find((item) => item.name === name);
     if (existingItem) {
       existingItem.quantity += 1;
@@ -142,6 +150,7 @@ document.querySelectorAll(".add-to-cart").forEach((btn) => {
     alert(`${name} added to cart!`);
   });
 });
+
 
 // =======================
 // Submit Order
