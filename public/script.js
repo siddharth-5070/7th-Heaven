@@ -117,6 +117,12 @@ function decreaseQty(index) {
   renderCart();
 }
 
+function removeFromCart(index) {
+  cart.splice(index, 1); // remove item at index
+  renderCart();           // re-render cart
+}
+
+
 // =======================
 // Add to Cart
 // =======================
