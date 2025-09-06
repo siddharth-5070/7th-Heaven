@@ -1,4 +1,3 @@
-// routes/order.js
 const express = require("express");
 const router = express.Router();
 const Order = require("../models/Order");
@@ -10,19 +9,32 @@ router.post("/", async (req, res) => {
   try {
     console.log("📦 Incoming order:", req.body); // Debug log
 
-    const { user, items, total } = req.body;
+    const { user, items, total, paymentMethod } = req.body;
 
     // Validate request body
-    if (!user || !items || !Array.isArray(items) || items.length === 0 || !total) {
+    if (
+      !user ||
+      !items ||
+      !Array.isArray(items) ||
+      items.length === 0 ||
+      !total ||
+      !paymentMethod || 
+      !["COD", "UPI"].includes(paymentMethod)
+    ) {
       return res.status(400).json({ success: false, message: "Invalid order data" });
     }
+
+    // Set initial status
+    const status = paymentMethod === "COD" ? "Pending" : "Paid";
 
     // Create new order
     const newOrder = new Order({
       user,
       items,
       total,
-      date: new Date()
+      paymentMethod,
+      status,
+      createdAt: new Date()
     });
 
     await newOrder.save();
@@ -39,7 +51,7 @@ router.post("/", async (req, res) => {
 // =======================
 router.get("/", async (req, res) => {
   try {
-    const orders = await Order.find().sort({ date: -1 });
+    const orders = await Order.find().sort({ createdAt: -1 });
     res.json({ success: true, orders });
   } catch (err) {
     console.error("❌ Error fetching orders:", err);
