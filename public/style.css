@@ -487,6 +487,20 @@ section {
   color: #d4a017;
 }
 
+#paymentOptions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 15px 0;
+  gap: 8px;
+  font-size: 16px;
+}
+
+#paymentOptions input[type="radio"] {
+  margin-right: 8px;
+}
+
+
 /* Gallery Modal */
 #galleryModal {
   display: none;
