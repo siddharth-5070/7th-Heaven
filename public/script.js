@@ -119,33 +119,28 @@ function decreaseQty(index) {
 
 function removeFromCart(index) {
   cart.splice(index, 1); // remove item at index
-  renderCart();           // re-render cart
+  renderCart(); // re-render cart
 }
-
 
 // =======================
 // Add to Cart
 // =======================
 document.querySelectorAll(".add-to-cart").forEach((btn) => {
   btn.addEventListener("click", () => {
-    // Check if user is logged in
     if (!currentUser) {
       alert("❌ Please login to add items to the cart.");
-      openModal(loginModal); // optional: open login modal
+      openModal(loginModal);
       return;
     }
-
     const name = btn.dataset.name;
     const price = parseInt(btn.dataset.price);
 
-    // Check if item already exists in cart
     const existingItem = cart.find((item) => item.name === name);
     if (existingItem) {
       existingItem.quantity += 1;
     } else {
       cart.push({ name, price, quantity: 1 });
     }
-
     renderCart();
     alert(`${name} added to cart!`);
   });
@@ -157,6 +152,11 @@ document.querySelectorAll(".add-to-cart").forEach((btn) => {
 // =======================
 submitOrderBtn.addEventListener("click", async () => {
   try {
+    if (cart.length === 0) {
+      alert("❌ Your cart is empty!");
+      return;
+    }
+
     const user = currentUser?.email || "guest";
     const items = cart.map((item) => ({
       name: item.name,
@@ -169,7 +169,10 @@ submitOrderBtn.addEventListener("click", async () => {
       0
     );
 
-    const orderData = { user, items, total };
+    // Get payment method
+    const paymentMethod = document.querySelector('input[name="payment"]:checked')?.value || "COD";
+
+    const orderData = { user, items, total, paymentMethod };
     console.log("📦 Sending order:", orderData);
 
     const response = await fetch(`${API_BASE}/api/order`, {
@@ -181,7 +184,7 @@ submitOrderBtn.addEventListener("click", async () => {
     const result = await response.json();
 
     if (result.success) {
-      alert("✅ Order placed successfully!");
+      alert(`✅ Order placed successfully! Payment: ${paymentMethod}`);
       cart.length = 0;
       renderCart();
       closeModal(cartModal);
@@ -193,6 +196,7 @@ submitOrderBtn.addEventListener("click", async () => {
     alert("❌ Failed to place order. Please try again.");
   }
 });
+
 
 // =======================
 // Auth Functions
@@ -211,7 +215,7 @@ async function handleSignup(event) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, email, password, address, mobile }),
-      credentials: "include"
+      credentials: "include",
     });
 
     const data = await res.json();
@@ -238,7 +242,7 @@ async function handleLogin(event) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
-      credentials: "include"
+      credentials: "include",
     });
 
     const data = await res.json();
@@ -246,6 +250,7 @@ async function handleLogin(event) {
       alert("Login successful!");
       currentUser = data.user;
       afterLogin();
+      updateCartButtons();
     } else {
       alert(data.message || "Login failed.");
     }
@@ -253,6 +258,9 @@ async function handleLogin(event) {
     console.error("❌ Error logging in:", err);
     alert("Error logging in.");
   }
+  currentUser = data.user;
+  afterLogin();
+  updateCartButtons(); // enable buttons after login
 }
 
 signupSubmit.addEventListener("click", handleSignup);
@@ -297,6 +305,19 @@ function afterLogin() {
   closeModal(loginModal);
   closeModal(signupModal);
 }
+
+function updateCartButtons() {
+  document.querySelectorAll(".add-to-cart").forEach((btn) => {
+    if (!currentUser) {
+      btn.classList.add("disabled");
+    } else {
+      btn.classList.remove("disabled");
+    }
+  });
+}
+
+// Call after login or on page load
+updateCartButtons();
 
 // =======================
 // Check if user is logged in on page load
