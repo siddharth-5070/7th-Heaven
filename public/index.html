@@ -43,15 +43,28 @@
     </div>
 
     <!-- Cart Modal -->
-    <div id="cartModal" class="modal">
-      <div class="modal-content">
-        <span class="close" id="closeCart">&times;</span>
-        <h2>Your Cart</h2>
-        <ul id="cartItems"></ul>
-        <h3>Total: ₹<span id="cartTotal">0</span></h3>
-        <button id="submitOrder">Submit Order</button>
-      </div>
+   <div id="cartModal" class="modal">
+  <div class="modal-content">
+    <span class="close" id="closeCart">&times;</span>
+    <h2>Your Cart</h2>
+    <ul id="cartItems"></ul>
+    <h3>Total: ₹<span id="cartTotal">0</span></h3>
+
+    <!-- Payment Option -->
+    <h3>Payment Method</h3>
+    <div id="paymentOptions">
+      <label>
+        <input type="radio" name="payment" value="COD" checked /> Cash on Delivery
+      </label>
+      <label>
+        <input type="radio" name="payment" value="UPI" /> UPI
+      </label>
     </div>
+
+    <button id="submitOrder">Submit Order</button>
+  </div>
+</div>
+
 
     <!-- Login Modal -->
     <div id="loginModal" class="modal">
