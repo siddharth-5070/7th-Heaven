@@ -444,6 +444,8 @@ section {
   animation: fadeInUp 0.3s ease-in-out;
 }
 
+
+
 /* Inputs */
 .modal-content input {
   width: 100%;
@@ -485,19 +487,6 @@ section {
 
 .close:hover {
   color: #d4a017;
-}
-
-#paymentOptions {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin: 15px 0;
-  gap: 8px;
-  font-size: 16px;
-}
-
-#paymentOptions input[type="radio"] {
-  margin-right: 8px;
 }
 
 
@@ -578,6 +567,46 @@ section {
   display: inline-block;
   margin-top: 15px;
 }
+
+/* Payment Options in Cart Modal */
+#paymentOptions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 15px 0;
+  gap: 8px;
+  font-size: 16px;
+}
+
+#paymentOptions input[type="radio"] {
+  margin-right: 8px;
+  cursor: pointer;
+}
+
+/* Highlight selected payment option (optional) */
+#paymentOptions input[type="radio"]:checked + label {
+  font-weight: bold;
+  color: #d4a017;
+}
+
+/* Submit Order button */
+#submitOrder {
+  margin-top: 15px;
+  padding: 12px 20px;
+  background-color: #d4a017;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s, transform 0.2s;
+}
+
+#submitOrder:hover {
+  background-color: #b88a12;
+  transform: scale(1.05);
+}
+
 
 /* Footer */
 footer {
