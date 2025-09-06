@@ -23,11 +23,23 @@ const signupSubmit = document.getElementById("signupSubmit");
 const cartItemsEl = document.getElementById("cartItems");
 const cartTotalEl = document.getElementById("cartTotal");
 const submitOrderBtn = document.getElementById("submitOrder");
+const menuToggle = document.querySelector(".menu-toggle");
+const navLinks = document.querySelector(".nav-links");
+const authButtons = document.querySelector(".auth-buttons");
 
 const welcomeMsg = document.getElementById("welcomeMsg");
 
 let cart = [];
 let currentUser = null;
+
+// =======================
+// Mobile Menu Toggle
+// =======================
+menuToggle.addEventListener("click", () => {
+  navLinks.classList.toggle("active");
+  authButtons.classList.toggle("active");
+  menuToggle.classList.toggle("open");
+});
 
 // =======================
 // Modal Functions
@@ -40,11 +52,6 @@ function openModal(modal) {
 function closeModal(modal) {
   modal.style.display = "none";
   document.body.classList.remove("modal-open");
-}
-
-function toggleMenu() {
-  document.getElementById("nav-links").classList.toggle("active");
-  document.getElementById("auth-buttons").classList.toggle("active");
 }
 
 // =======================
@@ -118,7 +125,6 @@ document.querySelectorAll(".add-to-cart").forEach((btn) => {
     const name = btn.dataset.name;
     const price = parseInt(btn.dataset.price);
 
-    // Check if item already exists in cart
     const existingItem = cart.find((item) => item.name === name);
     if (existingItem) {
       existingItem.quantity += 1;
@@ -134,11 +140,9 @@ document.querySelectorAll(".add-to-cart").forEach((btn) => {
 // =======================
 // Submit Order
 // =======================
-document.getElementById("submitOrder").addEventListener("click", async () => {
+submitOrderBtn.addEventListener("click", async () => {
   try {
     const user = currentUser?.email || "guest";
-
-    // Ensure items include quantity
     const items = cart.map((item) => ({
       name: item.name,
       price: item.price,
@@ -153,7 +157,6 @@ document.getElementById("submitOrder").addEventListener("click", async () => {
     const orderData = { user, items, total };
     console.log("📦 Sending order:", orderData);
 
-    // ✅ FIXED: added await before fetch
     const response = await fetch(`${API_BASE}/api/order`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -164,8 +167,8 @@ document.getElementById("submitOrder").addEventListener("click", async () => {
 
     if (result.success) {
       alert("✅ Order placed successfully!");
-      cart.length = 0; // clear cart
-      renderCart(); // re-render cart
+      cart.length = 0;
+      renderCart();
       closeModal(cartModal);
     } else {
       alert("❌ " + result.message);
@@ -193,12 +196,10 @@ async function handleSignup(event) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, email, password, address, mobile }),
-      credentials: "include"   // ✅ needed for cookies
+      credentials: "include"
     });
 
     const data = await res.json();
-    console.log("🔍 Signup response:", data);
-
     if (data.success) {
       alert("Signup successful! Please login.");
       closeModal(signupModal);
@@ -211,7 +212,6 @@ async function handleSignup(event) {
   }
 }
 
-
 async function handleLogin(event) {
   event.preventDefault();
 
@@ -223,15 +223,14 @@ async function handleLogin(event) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
-      credentials: "include"   // ✅ needed for cookies
+      credentials: "include"
     });
 
     const data = await res.json();
-    console.log("🔍 Login response:", data);
-
     if (data.success) {
       alert("Login successful!");
-      closeModal(loginModal);
+      currentUser = data.user;
+      afterLogin();
     } else {
       alert(data.message || "Login failed.");
     }
@@ -241,13 +240,12 @@ async function handleLogin(event) {
   }
 }
 
-
 signupSubmit.addEventListener("click", handleSignup);
 loginSubmit.addEventListener("click", handleLogin);
 
 logoutBtn.addEventListener("click", async () => {
   try {
-    await fetch("https://seventh-heaven-g20e.onrender.com/api/logout", {
+    await fetch(`${API_BASE}/api/auth/logout`, {
       method: "POST",
       credentials: "include",
     });
@@ -290,12 +288,9 @@ function afterLogin() {
 // =======================
 window.addEventListener("DOMContentLoaded", async () => {
   try {
-    const res = await fetch(
-      "https://seventh-heaven-g20e.onrender.com/api/verify",
-      {
-        credentials: "include",
-      }
-    );
+    const res = await fetch(`${API_BASE}/api/verify`, {
+      credentials: "include",
+    });
     const data = await res.json();
     if (data.success) {
       currentUser = data.user;
