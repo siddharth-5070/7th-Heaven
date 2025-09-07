@@ -16,34 +16,41 @@ app.use(express.static(path.join(__dirname, "public")));
 
 const cors = require("cors");
 
-const allowedOrigins = [
-  "http://127.0.0.1:5500",
-  "http://localhost:5500",
-  "https://7th-heaven1.netlify.app"
-];
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      console.log("🌍 Incoming request origin:", origin); // 👈 log it
+      if (!origin) return callback(null, true);
 
-app.use(cors({
-  origin: function (origin, callback) {
-    // Allow requests with no origin (like Postman or curl)
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.includes(origin)) {
-      return callback(null, true);
-    } else {
-      return callback(new Error("Not allowed by CORS"));
-    }
-  },
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true
-}));
+      if (process.env.NODE_ENV === "development") {
+        return callback(null, true);
+      }
 
+      const allowedOrigins = [
+        "http://127.0.0.1:5500",
+        "http://localhost:5500",
+        "https://7th-heaven.netlify.app",
+        "https://main--7th-heaven.netlify.app", // 👈 example if Netlify gives a preview domain
+      ];
 
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      } else {
+        console.error("❌ Blocked by CORS:", origin);
+        return callback(new Error("Not allowed by CORS"));
+      }
+    },
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
 
 // Routes
 const authRoutes = require("./routes/auth");
-const orderRoutes = require("./routes/orders");  // ✅ correct import
+const orderRoutes = require("./routes/orders"); // ✅ correct import
 
 app.use("/api/auth", authRoutes);
-app.use("/api/order", orderRoutes);  // ✅ correct variable
+app.use("/api/order", orderRoutes); // ✅ correct variable
 
 // Default test route
 app.get("/", (req, res) => {
@@ -51,13 +58,13 @@ app.get("/", (req, res) => {
 });
 
 // MongoDB connection
-mongoose.connect(process.env.MONGO_URI)
+mongoose
+  .connect(process.env.MONGO_URI)
   .then(() => console.log("✅ MongoDB connected"))
-  .catch(err => console.error("❌ MongoDB connection error:", err));
+  .catch((err) => console.error("❌ MongoDB connection error:", err));
 
 // Start server
 const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
-
