@@ -29,8 +29,9 @@ app.use(
       const allowedOrigins = [
         "http://127.0.0.1:5500",
         "http://localhost:5500",
-        "https://7th-heaven.netlify.app",
-        "https://main--7th-heaven.netlify.app", // 👈 example if Netlify gives a preview domain
+        "https://7th-heaven1.netlify.app",
+        "https://main--7th-heaven1.netlify.app",
+        "https://seventh-heaven-g20e.onrender.com", // ✅ allow self-origin
       ];
 
       if (allowedOrigins.includes(origin)) {
