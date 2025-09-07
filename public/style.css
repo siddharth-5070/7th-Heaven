@@ -570,18 +570,35 @@ section {
 }
 
 /* Payment Options */
-#paymentOptions {
+.payment-method {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  font-size: 16px;
+  margin-top: 10px;
 }
 
-#paymentOptions label {
+.payment-option {
   display: flex;
   align-items: center;
-  gap: 10px; /* Space between radio and text */
+  gap: 8px;
 }
+
+.scanner {
+  margin-top: 15px;
+  text-align: center;
+}
+
+.qr-code {
+  width: 150px;
+  height: 150px;
+  margin-top: 10px;
+}
+
+.hidden {
+  display: none;
+}
+
+
 
 /* Submit Order Button */
 #submitOrder {
