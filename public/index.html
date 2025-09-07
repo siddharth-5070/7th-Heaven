@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>7th Heaven Restaurant</title>
-    <link rel="stylesheet" href="./style.css" />
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <!-- Navbar -->
@@ -51,17 +51,19 @@
     <h3>Total: ₹<span id="cartTotal">0</span></h3>
 
     <!-- Payment Option -->
-    <div class="payment-method">
-  <div class="payment-option">
-    <input type="radio" name="payment" id="cod" value="cod">
-    <label for="cod">Cash on Delivery</label>
-  </div>
-  <div class="payment-option">
-    <input type="radio" name="payment" id="upi" value="upi">
-    <label for="upi">UPI</label>
+    <h3>Payment Method</h3>
+    <div id="paymentOptions">
+      <label>
+        <input type="radio" name="payment" value="COD" checked /> Cash on Delivery
+      </label>
+      <label>
+        <input type="radio" name="payment" value="UPI" /> UPI
+      </label>
+    </div>
+
+    <button id="submitOrder">Submit Order</button>
   </div>
 </div>
-
 
 
     <!-- Login Modal -->
@@ -453,6 +455,6 @@
       <p>&copy; 2025 7th Heaven Restaurant. All rights reserved.</p>
     </footer>
 
-    <script src="./script.js"></script>
+    <script src="script.js"></script>
   </body>
 </html>
