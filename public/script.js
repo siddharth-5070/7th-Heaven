@@ -336,3 +336,22 @@ window.addEventListener("DOMContentLoaded", async () => {
     console.error("Error verifying login:", err);
   }
 });
+
+// =======================
+// Payment Method Scanner
+// =======================
+const scannerOption = document.getElementById("scanner");
+const scannerSection = document.getElementById("scanner-section");
+const paymentOptions = document.querySelectorAll("input[name='payment']");
+
+if (paymentOptions.length > 0) {
+  paymentOptions.forEach(option => {
+    option.addEventListener("change", () => {
+      if (scannerOption && scannerOption.checked) {
+        scannerSection.classList.remove("hidden");
+      } else {
+        scannerSection.classList.add("hidden");
+      }
+    });
+  });
+}
